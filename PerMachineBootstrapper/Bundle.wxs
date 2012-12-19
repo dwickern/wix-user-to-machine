@@ -9,7 +9,8 @@
         SourceFile="$(var.UninstallRelatedProducts.TargetPath)"
         PerMachine="yes"
         Permanent="yes"
-        InstallCommand="--upgradecode $(var.UpgradeCode) --peruseronly --quiet"
+        LogPathVariable="UninstallRelatedProductsLogPath"
+        InstallCommand="--upgradecode $(var.UpgradeCode) --log [UninstallRelatedProductsLogPath] --peruseronly --quiet"
         >
         <Payload SourceFile="$(var.UninstallRelatedProducts.TargetDir)\CommandLine.dll"/>
       </ExePackage>

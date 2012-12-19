@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Text;
 using CommandLine;
@@ -27,6 +26,9 @@ namespace UninstallRelatedProducts
                     "If not specified, all related products will be uninstalled.")]
             public string MaxVersion { get; set; }
 
+            [Option(null, "log", HelpText = "Path to a log file to write progress information.")]
+            public string LogFilePath { get; set; }
+
             [Option(null, "quiet", DefaultValue = false, HelpText = "Quiet mode, no user interaction")]
             public bool Silent { get; set; }
 
@@ -39,59 +41,62 @@ namespace UninstallRelatedProducts
 
         static void Main(string[] args)
         {
-            try
+            var options = new Options();
+            if (!CommandLineParser.Default.ParseArguments(args, options))
             {
-                var options = new Options();
-                if (!CommandLineParser.Default.ParseArguments(args, options))
-                {
-                    // Failed to parse arguments
-                    // Arguments help text is already printed to stdout
-                    Environment.Exit(-1);
-                }
-
-                // Additional arguments parsing
-                var upgradeCode = Guid.Parse(options.UpgradeCode);
-                var maxVersion = default(Version);
-                if (!string.IsNullOrEmpty(options.MaxVersion))
-                    maxVersion = Version.Parse(options.MaxVersion);
-
-                var productCodes = Msi.GetRelatedProducts(upgradeCode).ToList();
-                Console.WriteLine("Number of related products found: " + productCodes.Count);
-                foreach (var product in productCodes)
-                {
-                    Console.WriteLine("Product code: " + product);
-
-                    if (maxVersion != null)
-                    {
-                        var version = Msi.GetVersion(product);
-                        Console.WriteLine("Product version: " + version);
-                        if (version > maxVersion)
-                        {
-                            Console.WriteLine("Skipping.");
-                            continue;
-                        }
-                    }
-
-                    if (options.PerUserOnly)
-                    {
-                        var allUsers = Msi.IsAllUsers(product);
-                        Console.WriteLine("All users: " + allUsers);
-                        if (allUsers)
-                        {
-                            Console.WriteLine("Skipping.");
-                            continue;
-                        }
-                    }
-
-                    Console.WriteLine("Uninstalling. Silently: " + options.Silent);
-                    Msi.Uninstall(product, options.Silent);
-                }
+                // Failed to parse arguments
+                // Arguments help text is already printed to stdout
+                Environment.Exit(-1);
             }
-            catch (Exception e)
+
+            using (var logger = new Logger(options.LogFilePath))
             {
-                // TODO how to write errors to burn log files?
-                Console.WriteLine(e.ToString());
-                throw;
+                try
+                {
+                    // Additional arguments parsing
+                    var upgradeCode = Guid.Parse(options.UpgradeCode);
+                    var maxVersion = default(Version);
+                    if (!string.IsNullOrEmpty(options.MaxVersion))
+                        maxVersion = Version.Parse(options.MaxVersion);
+
+                    var productCodes = Msi.GetRelatedProducts(upgradeCode).ToList();
+                    logger.Log("Number of related products found: " + productCodes.Count);
+
+                    foreach (var product in productCodes)
+                    {
+                        logger.Log("Product code: " + product);
+
+                        if (maxVersion != null)
+                        {
+                            var version = Msi.GetVersion(product);
+                            logger.Log("Product version: " + version);
+                            if (version > maxVersion)
+                            {
+                                logger.Log("Skipping.");
+                                continue;
+                            }
+                        }
+
+                        if (options.PerUserOnly)
+                        {
+                            var allUsers = Msi.IsAllUsers(product);
+                            logger.Log("All users: " + allUsers);
+                            if (allUsers)
+                            {
+                                Console.WriteLine("Skipping.");
+                                continue;
+                            }
+                        }
+
+                        logger.Log("Uninstalling. Silently: " + options.Silent);
+                        Msi.Uninstall(product, options.Silent);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Log(e);
+                    throw;
+                }
             }
         }
     }
