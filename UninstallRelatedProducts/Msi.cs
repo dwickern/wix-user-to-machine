@@ -171,43 +171,6 @@ namespace UninstallRelatedProducts
             [DllImport("msi.dll", SetLastError = true)]
             internal static extern UInt32 MsiSetInternalUI(UInt32 dwUILevel, ref IntPtr phWnd);
 
-            ///// <summary>
-            ///// The INSTALLUI_HANDLER function prototype defines a callback function that the installer calls
-            ///// for progress notification and error messages. For more information on the usage of this function
-            ///// prototype, a sample code snippet is available in <see cref="http://msdn.microsoft.com/en-us/library/windows/desktop/aa368786(v=vs.85).aspx">Handling Progress Messages Using MsiSetExternalUI</see>.
-            ///// </summary>
-            ///// <param name="pvContext">
-            ///// Pointer to an application context passed to the MsiSetExternalUI function.
-            ///// This parameter can be used for error checking.
-            ///// </param>
-            ///// <param name="iMessageType">
-            ///// Specifies a combination of one message box style, one message box icon type, one default button,
-            ///// and one installation message type.
-            ///// </param>
-            ///// <param name="szMessage">
-            ///// Specifies the message text.
-            ///// </param>
-            ///// <returns>
-            ///// <list type="table">
-            ///// <listheader>
-            /////     <term>Value</term>
-            /////     <description>Meaning</description>
-            ///// </listheader>
-            ///// <item>
-            /////     <term>-1</term>
-            /////     <description>An error was found in the message handler.
-            /////     Windows Installer ignores this returned value.</description>
-            ///// </item>
-            ///// <item>
-            /////     <term>0</term>
-            /////     <description>No action was taken.</description>
-            ///// </item>
-            ///// </list>
-            ///// The following return values map to the buttons specified by the message box style:
-            ///// <para>IDOK IDCANCEL IDABORT IDRETRY IDIGNORE IDYES IDNO</para>
-            ///// </returns>
-            //internal delegate int InstalluiHandler(IntPtr pvContext, UInt32 iMessageType, [MarshalAs(UnmanagedType.LPTStr)] string szMessage);
-
             /// <summary>
             /// The operation completed successfully.
             /// </summary>
