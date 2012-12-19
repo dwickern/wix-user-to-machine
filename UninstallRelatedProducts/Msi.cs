@@ -74,6 +74,24 @@ namespace UninstallRelatedProducts
         }
 
         /// <summary>
+        /// Gets whether the specified product was installed for all users
+        /// </summary>
+        /// <param name="productCode">Product code of the product to query</param>
+        /// <returns>
+        /// true if the product was installed for all users (per-machine); otherwise false.
+        /// </returns>
+        public static bool IsAllUsers(Guid productCode)
+        {
+            var assignmentType = GetInfo(productCode, Native.INSTALLPROPERTY_ASSIGNMENTTYPE);
+            switch (assignmentType)
+            {
+                case "0": return false;
+                case "1": return true;
+                default: throw new InvalidOperationException("Invalid assignment type value: " + assignmentType);
+            }
+        }
+
+        /// <summary>
         /// Gets an MSI property for the specified product
         /// </summary>
         /// <param name="productCode">Product code of the product to query</param>
@@ -312,6 +330,12 @@ namespace UninstallRelatedProducts
             /// Product version. For more information, see the <see cref="http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859(v=vs.85).aspx">ProductVersion</see> property.
             /// </summary>
             public const string INSTALLPROPERTY_VERSIONSTRING = "VersionString";
+
+            /// <summary>
+            /// Equals 0 (zero) if the product is advertised or installed per-user.
+            /// <para>Equals 1 (one) if the product is advertised or installed per-machine for all users.</para>
+            /// </summary>
+            public const string INSTALLPROPERTY_ASSIGNMENTTYPE = "AssignmentType";
         }
     }
 }

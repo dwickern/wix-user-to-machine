@@ -9,7 +9,7 @@
         SourceFile="$(var.UninstallRelatedProducts.TargetPath)"
         PerMachine="yes"
         Permanent="yes"
-        InstallCommand="--upgradecode $(var.UpgradeCode) --maxversion $(var.PerUserVersion) --quiet"
+        InstallCommand="--upgradecode $(var.UpgradeCode) --peruseronly --quiet"
         >
         <Payload SourceFile="$(var.UninstallRelatedProducts.TargetDir)\CommandLine.dll"/>
       </ExePackage>
