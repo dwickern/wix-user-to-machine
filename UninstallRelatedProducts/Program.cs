@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using CommandLine;
 
 namespace UninstallRelatedProducts
 {
@@ -11,13 +10,7 @@ namespace UninstallRelatedProducts
     {
         static void Main(string[] args)
         {
-            var options = new Options();
-            if (!CommandLineParser.Default.ParseArguments(args, options))
-            {
-                // Failed to parse arguments
-                // Arguments help text is already printed to stdout
-                Environment.Exit(-1);
-            }
+            var options = Options.Parse(args);
 
             using (var logger = new Logger(options.LogFilePath))
             {
@@ -61,6 +54,8 @@ namespace UninstallRelatedProducts
                         logger.Log("Uninstalling. Silently: " + options.Silent);
                         Msi.Uninstall(product, options.Silent);
                     }
+
+                    logger.Log("Uninstall completed successfully");
                 }
                 catch (Exception e)
                 {

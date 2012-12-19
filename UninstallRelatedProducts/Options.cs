@@ -36,5 +36,28 @@ namespace UninstallRelatedProducts
         {
             return HelpText.AutoBuild(this, c => HelpText.DefaultParsingErrorsHandler(this, c));
         }
+
+        /// <summary>
+        /// Parse command-line arguments into an <see cref="Options"/> instance.
+        /// </summary>
+        /// <param name="args">
+        /// Command-line arguments to parse, not null
+        /// </param>
+        /// <returns>
+        /// <see cref="Options"/> containing the parsed arguments, never null.
+        /// </returns>
+        public static Options Parse(string[] args)
+        {
+            if (args == null)
+                throw new ArgumentNullException("args");
+
+            var options = new Options();
+            if (!CommandLineParser.Default.ParseArguments(args, options))
+            {
+                throw new ArgumentException("Invalid command-line arguments", "args");
+            }
+
+            return options;
+        }
     }
 }
