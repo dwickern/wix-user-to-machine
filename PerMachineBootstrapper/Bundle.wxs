@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?include Common.wxi ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Bundle Name="PerMachineBootstrapper" Version="1.0.0.0" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+		<Chain>
+      <ExePackage
+        SourceFile="$(var.UninstallRelatedProducts.TargetPath)"
+        PerMachine="yes"
+        Permanent="yes"
+        InstallCommand="-i"
+        RepairCommand="-r"
+        UninstallCommand="-u"
+        />
+      <MsiPackage SourceFile="$(var.PerMachineSetup.TargetPath)"/>
+		</Chain>
+	</Bundle>
+</Wix>

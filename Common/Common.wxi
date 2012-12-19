@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <?define Manufacturer = UpgradeTest ?>
+  <?define UpgradeCode = 6b124a3c-f3f9-480d-82f9-881e0b5663a1 ?>
+</Include>

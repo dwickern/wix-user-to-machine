@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpgradeTestApplication", "UpgradeTestApplication\UpgradeTestApplication.csproj", "{976CAF44-BF5F-4CE4-855A-B169DF4970B8}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "PerUserSetup", "PerUserSetup\PerUserSetup.wixproj", "{74D774BA-6DEF-4BE3-9586-749B4C9C6D15}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "PerMachineSetup", "PerMachineSetup\PerMachineSetup.wixproj", "{ACADC8A0-BEA7-4F8A-BF84-2A8D2BC63D39}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "PerMachineBootstrapper", "PerMachineBootstrapper\PerMachineBootstrapper.wixproj", "{047F96C2-C5AA-4E0D-A126-12F47A346E16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2F1EDB78-3661-43EB-A2CF-9885BB330684}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Common.wxi = Common\Common.wxi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UninstallRelatedProducts", "UninstallRelatedProducts\UninstallRelatedProducts.csproj", "{D63D43EB-4F6F-4184-9E01-09B4255DD6AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{976CAF44-BF5F-4CE4-855A-B169DF4970B8}.Debug|x86.ActiveCfg = Debug|x86
+		{976CAF44-BF5F-4CE4-855A-B169DF4970B8}.Debug|x86.Build.0 = Debug|x86
+		{976CAF44-BF5F-4CE4-855A-B169DF4970B8}.Release|x86.ActiveCfg = Release|x86
+		{976CAF44-BF5F-4CE4-855A-B169DF4970B8}.Release|x86.Build.0 = Release|x86
+		{74D774BA-6DEF-4BE3-9586-749B4C9C6D15}.Debug|x86.ActiveCfg = Debug|x86
+		{74D774BA-6DEF-4BE3-9586-749B4C9C6D15}.Debug|x86.Build.0 = Debug|x86
+		{74D774BA-6DEF-4BE3-9586-749B4C9C6D15}.Release|x86.ActiveCfg = Release|x86
+		{74D774BA-6DEF-4BE3-9586-749B4C9C6D15}.Release|x86.Build.0 = Release|x86
+		{ACADC8A0-BEA7-4F8A-BF84-2A8D2BC63D39}.Debug|x86.ActiveCfg = Debug|x86
+		{ACADC8A0-BEA7-4F8A-BF84-2A8D2BC63D39}.Debug|x86.Build.0 = Debug|x86
+		{ACADC8A0-BEA7-4F8A-BF84-2A8D2BC63D39}.Release|x86.ActiveCfg = Release|x86
+		{ACADC8A0-BEA7-4F8A-BF84-2A8D2BC63D39}.Release|x86.Build.0 = Release|x86
+		{047F96C2-C5AA-4E0D-A126-12F47A346E16}.Debug|x86.ActiveCfg = Debug|x86
+		{047F96C2-C5AA-4E0D-A126-12F47A346E16}.Debug|x86.Build.0 = Debug|x86
+		{047F96C2-C5AA-4E0D-A126-12F47A346E16}.Release|x86.ActiveCfg = Release|x86
+		{047F96C2-C5AA-4E0D-A126-12F47A346E16}.Release|x86.Build.0 = Release|x86
+		{D63D43EB-4F6F-4184-9E01-09B4255DD6AC}.Debug|x86.ActiveCfg = Debug|x86
+		{D63D43EB-4F6F-4184-9E01-09B4255DD6AC}.Debug|x86.Build.0 = Debug|x86
+		{D63D43EB-4F6F-4184-9E01-09B4255DD6AC}.Release|x86.ActiveCfg = Release|x86
+		{D63D43EB-4F6F-4184-9E01-09B4255DD6AC}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
