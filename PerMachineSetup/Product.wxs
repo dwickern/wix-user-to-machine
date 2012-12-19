@@ -3,7 +3,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product
     Id="*"
-    Name="PerUserSetup"
+    Name="PerMachineSetup"
     Language="1033"
     Version="$(var.PerMachineVersion)"
     Manufacturer="$(var.Manufacturer)"
