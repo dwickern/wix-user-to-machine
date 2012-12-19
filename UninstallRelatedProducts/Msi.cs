@@ -168,7 +168,7 @@ namespace UninstallRelatedProducts
             /// The previous user interface level is returned.
             /// If an invalid dwUILevel is passed, then INSTALLUILEVEL_NOCHANGE is returned.
             /// </returns>
-            [DllImport("msi.dll", SetLastError = true)]
+            [DllImport("msi.dll")]
             internal static extern UInt32 MsiSetInternalUI(UInt32 dwUILevel, ref IntPtr phWnd);
 
             /// <summary>
