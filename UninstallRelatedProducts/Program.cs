@@ -28,33 +28,29 @@ namespace UninstallRelatedProducts
 
         static void Main(string[] args)
         {
-            using (var sw = File.CreateText(@"C:\uninstall.txt"))
+            try
             {
-                try
+                var options = new Options();
+                if (!CommandLineParser.Default.ParseArguments(args, options))
                 {
-                    var options = new Options();
-                    if (!CommandLineParser.Default.ParseArguments(args, options))
-                    {
-                        // Failed to parse arguments
-                        // Arguments help text is already printed to stdout
-                        Environment.Exit(-1);
-                    }
+                    // Failed to parse arguments
+                    // Arguments help text is already printed to stdout
+                    Environment.Exit(-1);
+                }
 
-                    var upgradeCode = Guid.Parse(options.UpgradeCode);
-                    var productCodes = Msi.GetRelatedProducts(upgradeCode);
-                    foreach (var product in productCodes)
-                    {
-                        sw.WriteLine("Uninstalling: " + product);
-                        Console.WriteLine(product);
-                        Msi.Uninstall(product, options.Silent);
-                    }
-                }
-                catch (Exception e)
+                var upgradeCode = Guid.Parse(options.UpgradeCode);
+                var productCodes = Msi.GetRelatedProducts(upgradeCode);
+                foreach (var product in productCodes)
                 {
-                    sw.WriteLine(e.ToString());
-                    Console.WriteLine(e.ToString());
-                    throw;
+                    Console.WriteLine(product);
+                    Msi.Uninstall(product, options.Silent);
                 }
+            }
+            catch (Exception e)
+            {
+                // TODO how to write errors to burn log files?
+                Console.WriteLine(e.ToString());
+                throw;
             }
         }
     }
