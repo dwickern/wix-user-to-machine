@@ -2,4 +2,15 @@
 <Include>
   <?define Manufacturer = UpgradeTest ?>
   <?define UpgradeCode = 6b124a3c-f3f9-480d-82f9-881e0b5663a1 ?>
+  
+  <!--
+    The current installer version.
+  -->
+  <?define PerMachineVersion = 2.0.0.0 ?>
+
+  <!--
+    The version of the user-mode installer.
+    This should not be changed.
+  -->
+  <?define PerUserVersion = 1.0.0.0 ?>
 </Include>

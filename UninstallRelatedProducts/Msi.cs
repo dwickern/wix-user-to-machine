@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -40,6 +41,11 @@ namespace UninstallRelatedProducts
             }
         }
 
+        /// <summary>
+        /// Uninstalls the specified product
+        /// </summary>
+        /// <param name="productCode">Product code of the product to uninstall</param>
+        /// <param name="silent">Whether to suppress the UI</param>
         public static void Uninstall(Guid productCode, bool silent)
         {
             if (silent)
@@ -54,6 +60,46 @@ namespace UninstallRelatedProducts
             var result = Native.MsiConfigureProduct(productCodeString, Native.INSTALLLEVEL_DEFAULT, Native.INSTALLSTATE_ABSENT);
             if (result != Native.ERROR_SUCCESS)
                 throw new Win32Exception((int)result);
+        }
+
+        /// <summary>
+        /// Gets the version of the specified product
+        /// </summary>
+        /// <param name="productCode">Product code of the product to query</param>
+        /// <returns>Product version, never null</returns>
+        public static Version GetVersion(Guid productCode)
+        {
+            var version = GetInfo(productCode, Native.INSTALLPROPERTY_VERSIONSTRING);
+            return Version.Parse(version);
+        }
+
+        /// <summary>
+        /// Gets an MSI property for the specified product
+        /// </summary>
+        /// <param name="productCode">Product code of the product to query</param>
+        /// <param name="property">MSI property to retrieve</param>
+        /// <returns>Property value, never null</returns>
+        static string GetInfo(Guid productCode, string property)
+        {
+            // Product code must be in registry format, enclosed in curly braces
+            var productCodeString = productCode.ToString("B");
+
+            var len = 256;
+            var buffer = new StringBuilder(len);
+            var result = Native.MsiGetProductInfo(productCodeString, property, buffer, ref len);
+
+            if (result == Native.ERROR_MORE_DATA)
+            {
+                // Buffer wasn't big enough; resize and try again
+                ++len;
+                buffer = new StringBuilder(len);
+                result = Native.MsiGetProductInfo(productCodeString, property, buffer, ref len);
+            }
+
+            if (result != Native.ERROR_SUCCESS)
+                throw new Win32Exception((int)result);
+
+            return buffer.ToString();
         }
 
         /// <summary>
@@ -172,9 +218,75 @@ namespace UninstallRelatedProducts
             internal static extern UInt32 MsiSetInternalUI(UInt32 dwUILevel, ref IntPtr phWnd);
 
             /// <summary>
+            /// The <see cref="MsiGetProductInfo"/> function returns product information for published and installed products.
+            /// </summary>
+            /// <param name="szProduct">
+            /// Specifies the product code for the product.
+            /// </param>
+            /// <param name="szProperty">
+            /// Specifies the property to be retrieved.
+            /// 
+            /// <para>The <see cref="http://msdn.microsoft.com/en-us/library/windows/desktop/aa371225(v=vs.85).aspx">Required Properties</see>
+            /// are guaranteed to be available, but other properties are available only if that property is set. For more information,
+            /// see <see cref="http://msdn.microsoft.com/en-us/library/windows/desktop/aa370889(v=vs.85).aspx">Properties</see>.</para>
+            /// </param>
+            /// <param name="lpValueBuf">
+            /// Pointer to a buffer that receives the property value. This parameter can be null.
+            /// </param>
+            /// <param name="pcchValueBuf">
+            /// Pointer to a variable that specifies the size, in characters, of the buffer pointed to by the lpValueBuf parameter.
+            /// On input, this is the full size of the buffer, including a space for a terminating null character. If the buffer
+            /// passed in is too small, the count returned does not include the terminating null character.
+            /// 
+            /// <para>If lpValueBuf is null, pcchValueBuf can be null. In this case, the function checks that the property is registered
+            /// correctly with the product.</para>
+            /// </param>
+            /// <returns>
+            /// <list type="table">
+            /// <listheader>
+            ///     <term>Value</term>
+            ///     <description>Meaning</description>
+            /// </listheader>
+            /// <item>
+            ///     <term>ERROR_BAD_CONFIGURATION</term>
+            ///     <description>The configuration data is corrupt.</description>
+            /// </item>
+            /// <item>
+            ///     <term>ERROR_INVALID_PARAMETER</term>
+            ///     <description>An invalid parameter was passed to the function.</description>
+            /// </item>
+            /// <item>
+            ///     <term>ERROR_MORE_DATA</term>
+            ///     <description>A buffer is too small to hold the requested data.</description>
+            /// </item>
+            /// <item>
+            ///     <term>ERROR_SUCCESS</term>
+            ///     <description>The function completed successfully.</description>
+            /// </item>
+            /// <item>
+            ///     <term>ERROR_UNKNOWN_PRODUCT</term>
+            ///     <description>The product is unadvertised or uninstalled.</description>
+            /// </item>
+            /// <item>
+            ///     <term>ERROR_UNKNOWN_PROPERTY</term>
+            ///     <description>The property is unrecognized.
+            ///     <para>Note: The <see cref="MsiGetProductInfo"/> function returns ERROR_UNKNOWN_PROPERTY if
+            ///     the application being queried is advertised and not installed.</para></description>
+            /// </item>
+            /// </list>
+            /// </returns>
+            [DllImport("msi.dll", CharSet = CharSet.Auto)]
+            internal static extern UInt32 MsiGetProductInfo(string szProduct, string szProperty, [Out] StringBuilder lpValueBuf, ref Int32 pcchValueBuf);
+
+            /// <summary>
             /// The operation completed successfully.
             /// </summary>
             public const UInt32 ERROR_SUCCESS = 0x00000000;
+
+            /// <summary>
+            /// More data is available.
+            /// </summary>
+            public const UInt32 ERROR_MORE_DATA = 0x000000EA;
 
             /// <summary>
             /// No more data is available.
@@ -195,6 +307,11 @@ namespace UninstallRelatedProducts
             /// The product is uninstalled.
             /// </summary>
             public const Int32 INSTALLSTATE_ABSENT = 2;
+
+            /// <summary>
+            /// Product version. For more information, see the <see cref="http://msdn.microsoft.com/en-us/library/windows/desktop/aa370859(v=vs.85).aspx">ProductVersion</see> property.
+            /// </summary>
+            public const string INSTALLPROPERTY_VERSIONSTRING = "VersionString";
         }
     }
 }
