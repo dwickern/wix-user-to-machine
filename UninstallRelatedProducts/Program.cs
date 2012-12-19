@@ -39,10 +39,11 @@ namespace UninstallRelatedProducts
                 }
 
                 var upgradeCode = Guid.Parse(options.UpgradeCode);
-                var productCodes = Msi.GetRelatedProducts(upgradeCode);
+                var productCodes = Msi.GetRelatedProducts(upgradeCode).ToList();
+                Console.WriteLine("Number of related products found: " + productCodes.Count);
                 foreach (var product in productCodes)
                 {
-                    Console.WriteLine(product);
+                    Console.WriteLine("Uninstalling product: " + product);
                     Msi.Uninstall(product, options.Silent);
                 }
             }
