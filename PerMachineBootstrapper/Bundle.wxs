@@ -9,10 +9,10 @@
         SourceFile="$(var.UninstallRelatedProducts.TargetPath)"
         PerMachine="yes"
         Permanent="yes"
-        InstallCommand="-i"
-        RepairCommand="-r"
-        UninstallCommand="-u"
-        />
+        InstallCommand="--upgradecode $(var.UpgradeCode) --quiet"
+        >
+        <Payload SourceFile="$(var.UninstallRelatedProducts.TargetDir)\CommandLine.dll"/>
+      </ExePackage>
       <MsiPackage SourceFile="$(var.PerMachineSetup.TargetPath)"/>
 		</Chain>
 	</Bundle>
