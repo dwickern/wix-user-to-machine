@@ -21,3 +21,7 @@ There will be two ARP entries since MSI did not perform an upgrade.
 
 If you install `PerUserSetup` then `PerMachineBootstrapper`, the per-user installation will be properly removed.
 There will only be one ARP entry for `PerMachineBootstrapper`.
+
+## License
+
+See [LICENSE](LICENSE.md) (MIT).
