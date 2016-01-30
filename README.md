@@ -10,11 +10,11 @@ This is a [well](http://stackoverflow.com/questions/678002/how-do-i-fix-the-upgr
 This example leverages burn to work around this limitation.
 
 Projects:
-- [UpgradeTestApplication](wix-user-to-machine/tree/master/UpgradeTestApplication): A dummy application to install
-- [PerUserSetup](wix-user-to-machine/tree/master/PerUserSetup): WiX MSI with `perUser` scope
-- [PerMachineSetup](wix-user-to-machine/tree/master/PerMachineSetup): WiX MSI with `perMachine` scope
-- [UninstallRelatedProducts](wix-user-to-machine/tree/master/UninstallRelatedProducts): Command-line application which uninstalls products with a given upgrade code
-- [PerMachineBootstrapper](wix-user-to-machine/tree/master/PerMachineBootstrapper): WiX bootstrapper which combines `UninstallRelatedProducts` and `PerMachineSetup`
+- [UpgradeTestApplication](UpgradeTestApplication): A dummy application to install
+- [PerUserSetup](PerUserSetup): WiX MSI with `perUser` scope
+- [PerMachineSetup](PerMachineSetup): WiX MSI with `perMachine` scope
+- [UninstallRelatedProducts](UninstallRelatedProducts): Command-line application which uninstalls products with a given upgrade code
+- [PerMachineBootstrapper](PerMachineBootstrapper): WiX bootstrapper which combines `UninstallRelatedProducts` and `PerMachineSetup`
 
 To reproduce the upgrade problem, install `PerUserSetup` then `PerMachineSetup`.
 There will be two ARP entries since MSI did not perform an upgrade.
